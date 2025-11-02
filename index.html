@@ -54,7 +54,7 @@
             align-items: center;
         }
 
-        /* Мобильные телефоны (по умолчанию) - 1 колонка */
+        /* Мобильные телефоны (по умолчанию) - 2 колонки */
         .buttons-container {
             grid-template-columns: repeat(2, 1fr);
             max-width: 300px;
@@ -130,15 +130,22 @@
             box-shadow: 0 12px 25px rgba(0,0,0,0.4);
         }
 
+        /* УВЕЛИЧЕННЫЕ ИКОНКИ */
         .btn i {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
+            font-size: 3rem; /* Увеличили размер иконок */
+            margin-bottom: 15px;
             display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2); /* Увеличение иконки при наведении */
         }
 
         .btn-text {
             font-size: 0.9rem;
             opacity: 0.9;
+            font-weight: bold;
         }
 
         /* Цвета кнопок с градиентами */
@@ -169,12 +176,39 @@
             }
             
             .btn i {
-                font-size: 2rem;
+                font-size: 2.5rem; /* Большие иконки даже на маленьких экранах */
             }
             
             .title {
                 font-size: 2rem;
                 margin-bottom: 30px;
+            }
+        }
+
+        /* Планшеты - увеличиваем иконки */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .btn i {
+                font-size: 3.5rem;
+            }
+            
+            .btn {
+                min-height: 140px;
+            }
+        }
+
+        /* Компьютеры - максимальный размер иконок */
+        @media (min-width: 1024px) {
+            .btn i {
+                font-size: 4rem; /* Очень большие иконки на компьютерах */
+            }
+            
+            .btn {
+                min-height: 160px;
+                font-size: 1.3rem;
+            }
+            
+            .btn-text {
+                font-size: 1.1rem;
             }
         }
 
@@ -185,12 +219,27 @@
             }
             
             .btn {
-                min-height: 150px;
-                font-size: 1.3rem;
+                min-height: 180px;
+                font-size: 1.4rem;
             }
             
             .btn i {
-                font-size: 3rem;
+                font-size: 4.5rem; /* Максимальный размер иконок */
+            }
+            
+            .btn-text {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Очень большие экраны */
+        @media (min-width: 1920px) {
+            .btn i {
+                font-size: 5rem;
+            }
+            
+            .btn {
+                min-height: 200px;
             }
         }
     </style>

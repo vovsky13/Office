@@ -20,7 +20,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
             position: relative;
-            padding: 20px;
+            padding: 15px;
         }
 
         #matrix {
@@ -34,30 +34,31 @@
 
         .container {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             width: 100%;
             max-width: 1200px;
         }
 
         .title {
             color: #0F0;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
             text-shadow: 0 0 10px #0F0;
             font-weight: bold;
         }
 
         .buttons-container {
             display: grid;
-            gap: 25px;
+            gap: 15px;
             justify-content: center;
             align-items: center;
+            width: 100%;
         }
 
-        /* Мобильные телефоны (по умолчанию) - 2 колонки */
+        /* Мобильные телефоны (по умолчанию) - 2 колонки, 2 строки */
         .buttons-container {
             grid-template-columns: repeat(2, 1fr);
-            max-width: 300px;
+            max-width: 400px;
             margin: 0 auto;
         }
 
@@ -66,6 +67,20 @@
             .buttons-container {
                 grid-template-columns: repeat(2, 1fr);
                 max-width: 500px;
+                gap: 25px;
+            }
+            
+            .title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+        }
+
+        /* Компьютеры (1024px и выше) - 4 колонки */
+        @media (min-width: 1024px) {
+            .buttons-container {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1000px;
                 gap: 30px;
             }
             
@@ -75,37 +90,23 @@
             }
         }
 
-        /* Компьютеры (1024px и выше) - 4 колонки */
-        @media (min-width: 1024px) {
-            .buttons-container {
-                grid-template-columns: repeat(4, 1fr);
-                max-width: 1000px;
-                gap: 40px;
-            }
-            
-            .title {
-                font-size: 3.5rem;
-                margin-bottom: 60px;
-            }
-        }
-
         .btn {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             text-decoration: none;
             transition: all 0.3s ease;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            aspect-ratio: 1/1; /* Делаем кнопки квадратными */
-            min-height: 120px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            aspect-ratio: 1/1;
+            min-height: 0;
             position: relative;
             overflow: hidden;
         }
@@ -126,24 +127,24 @@
         }
 
         .btn:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
 
-        /* УВЕЛИЧЕННЫЕ ИКОНКИ */
+        /* Иконки */
         .btn i {
-            font-size: 3rem; /* Увеличили размер иконок */
-            margin-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
             display: block;
             transition: transform 0.3s ease;
         }
 
         .btn:hover i {
-            transform: scale(1.2); /* Увеличение иконки при наведении */
+            transform: scale(1.15);
         }
 
         .btn-text {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             font-weight: bold;
         }
@@ -163,32 +164,52 @@
         }
 
         /* Очень маленькие экраны */
-        @media (max-width: 480px) {
+        @media (max-width: 380px) {
             .buttons-container {
-                grid-template-columns: 1fr;
-                max-width: 200px;
-                gap: 20px;
+                gap: 12px;
+                max-width: 320px;
             }
             
             .btn {
-                min-height: 100px;
-                padding: 15px;
+                padding: 12px;
+                border-radius: 10px;
             }
             
             .btn i {
-                font-size: 2.5rem; /* Большие иконки даже на маленьких экранах */
+                font-size: 1.8rem;
+                margin-bottom: 6px;
+            }
+            
+            .btn-text {
+                font-size: 0.75rem;
             }
             
             .title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+
+        /* Средние телефоны */
+        @media (min-width: 381px) and (max-width: 480px) {
+            .buttons-container {
+                gap: 15px;
+                max-width: 350px;
+            }
+            
+            .btn i {
                 font-size: 2rem;
-                margin-bottom: 30px;
             }
         }
 
         /* Планшеты - увеличиваем иконки */
         @media (min-width: 768px) and (max-width: 1023px) {
             .btn i {
-                font-size: 3.5rem;
+                font-size: 2.8rem;
             }
             
             .btn {
@@ -199,47 +220,36 @@
         /* Компьютеры - максимальный размер иконок */
         @media (min-width: 1024px) {
             .btn i {
-                font-size: 4rem; /* Очень большие иконки на компьютерах */
+                font-size: 3.2rem;
             }
             
             .btn {
-                min-height: 160px;
-                font-size: 1.3rem;
+                min-height: 150px;
+                font-size: 1.1rem;
             }
             
             .btn-text {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
             }
         }
 
         /* Большие экраны */
         @media (min-width: 1440px) {
             .buttons-container {
-                gap: 50px;
+                gap: 40px;
             }
             
             .btn {
                 min-height: 180px;
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
             
             .btn i {
-                font-size: 4.5rem; /* Максимальный размер иконок */
+                font-size: 3.8rem;
             }
             
             .btn-text {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Очень большие экраны */
-        @media (min-width: 1920px) {
-            .btn i {
-                font-size: 5rem;
-            }
-            
-            .btn {
-                min-height: 200px;
+                font-size: 1rem;
             }
         }
     </style>

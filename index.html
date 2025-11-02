@@ -47,6 +47,11 @@
             font-weight: bold;
         }
 
+        .winter .title {
+            color: #87CEEB;
+            text-shadow: 0 0 10px #87CEEB;
+        }
+
         .buttons-container {
             display: grid;
             gap: 15px;
@@ -284,7 +289,7 @@
     <canvas id="matrix"></canvas>
     
     <div class="container">
-        <h1 class="title">Свяжитесь со мной</h1>
+        <h1 class="title" id="page-title">Свяжитесь со мной</h1>
         <div class="buttons-container">
             <a href="https://wa.me/37379613846?text=👋" class="btn whatsapp">
                 <i class="fab fa-whatsapp"></i>
@@ -310,7 +315,7 @@
     </div>
 
     <script>
-        // Matrix rain animation
+        // Matrix rain animation with seasonal theme
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -321,7 +326,40 @@
 
         resizeCanvas();
 
-        const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+        // Check if it's winter season (December 1st to February 28/29)
+        function isWinterSeason() {
+            const now = new Date();
+            const month = now.getMonth() + 1; // 1-12
+            const day = now.getDate();
+            
+            // December 1st to end of February
+            return (month === 12 && day >= 1) || (month === 1) || (month === 2);
+        }
+
+        // Set seasonal characters, colors and title
+        let chars, color, isWinter;
+        
+        function setSeasonalTheme() {
+            isWinter = isWinterSeason();
+            const titleElement = document.getElementById('page-title');
+            
+            if (isWinter) {
+                // Winter theme - snowflakes and winter symbols
+                chars = '❄❅❆★❤♣♦♠⛄☃️🎄🎅🤶';
+                color = '#87CEEB'; // Light blue for snow
+                document.body.classList.add('winter');
+                titleElement.textContent = 'С Новым Годом!';
+            } else {
+                // Default matrix theme
+                chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+                color = '#0F0'; // Green for matrix
+                document.body.classList.remove('winter');
+                titleElement.textContent = 'Свяжитесь со мной';
+            }
+        }
+
+        setSeasonalTheme();
+
         const charArray = chars.split('');
         const fontSize = 14;
         const columns = canvas.width / fontSize;
@@ -332,10 +370,10 @@
         }
 
         function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = isWinter ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.fillStyle = '#0F0';
+            ctx.fillStyle = color;
             ctx.font = fontSize + 'px monospace';
 
             for(let i = 0; i < drops.length; i++) {
@@ -352,6 +390,9 @@
         setInterval(draw, 35);
 
         window.addEventListener('resize', resizeCanvas);
+
+        // Check season daily to update theme
+        setInterval(setSeasonalTheme, 24 * 60 * 60 * 1000); // Check once per day
     </script>
 </body>
 </html>

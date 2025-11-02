@@ -149,6 +149,15 @@
             font-weight: bold;
         }
 
+        /* Контактная информация */
+        .contact-info {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.8;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
         /* Цвета кнопок с градиентами */
         .whatsapp { 
             background: linear-gradient(135deg, #25D366, #128C7E);
@@ -184,6 +193,10 @@
                 font-size: 0.75rem;
             }
             
+            .contact-info {
+                font-size: 0.65rem;
+            }
+            
             .title {
                 font-size: 1.5rem;
                 margin-bottom: 20px;
@@ -215,6 +228,10 @@
             .btn {
                 min-height: 140px;
             }
+            
+            .contact-info {
+                font-size: 0.8rem;
+            }
         }
 
         /* Компьютеры - максимальный размер иконок */
@@ -230,6 +247,10 @@
             
             .btn-text {
                 font-size: 0.9rem;
+            }
+            
+            .contact-info {
+                font-size: 0.85rem;
             }
         }
 
@@ -251,6 +272,10 @@
             .btn-text {
                 font-size: 1rem;
             }
+            
+            .contact-info {
+                font-size: 0.9rem;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -261,21 +286,25 @@
     <div class="container">
         <h1 class="title">Свяжитесь со мной</h1>
         <div class="buttons-container">
-            <a href="#" class="btn whatsapp">
+            <a href="https://wa.me/37379613846" class="btn whatsapp" target="_blank">
                 <i class="fab fa-whatsapp"></i>
                 <span class="btn-text">WhatsApp</span>
+                <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="#" class="btn viber">
+            <a href="viber://chat?number=37379613846" class="btn viber" target="_blank">
                 <i class="fab fa-viber"></i>
                 <span class="btn-text">Viber</span>
+                <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="#" class="btn telegram">
+            <a href="https://t.me/+37379613846" class="btn telegram" target="_blank">
                 <i class="fab fa-telegram"></i>
                 <span class="btn-text">Telegram</span>
+                <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="#" class="btn email">
+            <a href="mailto:printreccomp@mail.ru" class="btn email">
                 <i class="far fa-envelope"></i>
                 <span class="btn-text">Почта</span>
+                <span class="contact-info">printreccomp@mail.ru</span>
             </a>
         </div>
     </div>

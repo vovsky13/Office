@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Мессенджеры</title>
     <style>
         * {
@@ -291,22 +292,24 @@
     <div class="container">
         <h1 class="title" id="page-title">Свяжитесь со мной</h1>
         <div class="buttons-container">
-            <a href="https://wa.me/37379613846?text=👋" class="btn whatsapp">
+            <a href="https://wa.me/37379613846?text=%F0%9F%91%8B" class="btn whatsapp">
                 <i class="fab fa-whatsapp"></i>
                 <span class="btn-text">WhatsApp</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="#" class="btn viber" id="viber-link">
+            <!-- Viber: правильный deep link + JS fallback -->
+            <a href="viber://chat?number=%2B37379613846" class="btn viber" id="viber-link">
                 <i class="fab fa-viber"></i>
                 <span class="btn-text">Viber</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="https://t.me/+37379613846?text=👋" class="btn telegram">
+            <!-- Telegram: deep link по номеру + JS fallback -->
+            <a href="tg://msg?to=%2B37379613846" class="btn telegram" id="telegram-link">
                 <i class="fab fa-telegram"></i>
                 <span class="btn-text">Telegram</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="mailto:printreccomp@mail.ru?subject=👋" class="btn email">
+            <a href="mailto:printreccomp@mail.ru?subject=%F0%9F%91%8B" class="btn email">
                 <i class="far fa-envelope"></i>
                 <span class="btn-text">Почта</span>
                 <span class="contact-info">printreccomp@mail.ru</span>
@@ -362,12 +365,17 @@
 
         const charArray = chars.split('');
         const fontSize = 14;
-        const columns = canvas.width / fontSize;
+        let columns = Math.floor(canvas.width / fontSize);
         const drops = [];
 
-        for(let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -100;
+        function initDrops() {
+            columns = Math.floor(canvas.width / fontSize);
+            drops.length = 0;
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.random() * -100;
+            }
         }
+        initDrops();
 
         function draw() {
             ctx.fillStyle = isWinter ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.05)';
@@ -376,11 +384,11 @@
             ctx.fillStyle = color;
             ctx.font = fontSize + 'px monospace';
 
-            for(let i = 0; i < drops.length; i++) {
+            for (let i = 0; i < drops.length; i++) {
                 const text = charArray[Math.floor(Math.random() * charArray.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
                 drops[i]++;
@@ -389,35 +397,55 @@
 
         setInterval(draw, 35);
 
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initDrops();
+        });
 
         // Check season daily to update theme
         setInterval(setSeasonalTheme, 24 * 60 * 60 * 1000); // Check once per day
 
-        // Viber link handler for all devices
+        // ===== Deep-link helpers with smart fallback =====
+        function openWithFallback(appURL, storeOrWebURL, timeoutMs = 1200) {
+            let fallbackTimer;
+
+            const onVisibilityChange = () => {
+                if (document.hidden) {
+                    clearTimeout(fallbackTimer);
+                    document.removeEventListener('visibilitychange', onVisibilityChange);
+                }
+            };
+
+            document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
+
+            // Attempt to open app
+            window.location.href = appURL;
+
+            // If app didn't open, go to store/web
+            fallbackTimer = setTimeout(() => {
+                document.removeEventListener('visibilitychange', onVisibilityChange);
+                window.location.href = storeOrWebURL;
+            }, timeoutMs);
+        }
+
+        // Viber link handler (iOS/Android)
         document.getElementById('viber-link').addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // Detect iOS devices
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
-            if (isIOS) {
-                // For iOS - try multiple approaches
-                window.location.href = 'viber://add?number=37379613846';
-                
-                // Fallback - if Viber is not installed, open App Store
-                setTimeout(function() {
-                    window.location.href = 'https://apps.apple.com/app/viber-messenger-chats-calls/id382617920';
-                }, 2000);
-            } else {
-                // For Android and other devices
-                window.location.href = 'viber://chat?number=37379613846';
-                
-                // Fallback for Android
-                setTimeout(function() {
-                    window.location.href = 'https://play.google.com/store/apps/details?id=com.viber.voip';
-                }, 2000);
-            }
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const number = '%2B37379613846';
+            const deeplink = `viber://chat?number=${number}`;
+            const storeURL = isIOS
+                ? 'https://apps.apple.com/app/viber-messenger-chats-calls/id382617920'
+                : 'https://play.google.com/store/apps/details?id=com.viber.voip';
+            openWithFallback(deeplink, storeURL, 1200);
+        });
+
+        // Telegram link handler с веб-fallback
+        document.getElementById('telegram-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const appURL = 'tg://msg?to=%2B37379613846';
+            const webFallback = 'https://t.me/share/url?url=&text=%F0%9F%91%8B';
+            openWithFallback(appURL, webFallback, 1200);
         });
     </script>
 </body>

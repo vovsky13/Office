@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Мессенджеры</title>
     <style>
         * {
@@ -51,6 +50,11 @@
         .winter .title {
             color: #87CEEB;
             text-shadow: 0 0 10px #87CEEB;
+        }
+
+        .valentine .title {
+            color: #FF69B4;
+            text-shadow: 0 0 10px #FF69B4;
         }
 
         .buttons-container {
@@ -292,24 +296,22 @@
     <div class="container">
         <h1 class="title" id="page-title">Свяжитесь со мной</h1>
         <div class="buttons-container">
-            <a href="https://wa.me/37379613846?text=%F0%9F%91%8B" class="btn whatsapp">
+            <a href="https://wa.me/37379613846?text=👋" class="btn whatsapp">
                 <i class="fab fa-whatsapp"></i>
                 <span class="btn-text">WhatsApp</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <!-- Viber: правильный deep link + JS fallback -->
-            <a href="viber://chat?number=%2B37379613846" class="btn viber" id="viber-link">
+            <a href="#" class="btn viber" id="viber-link">
                 <i class="fab fa-viber"></i>
                 <span class="btn-text">Viber</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <!-- Telegram: deep link по номеру + JS fallback -->
-            <a href="tg://msg?to=%2B37379613846" class="btn telegram" id="telegram-link">
+            <a href="https://t.me/+37379613846?text=👋" class="btn telegram">
                 <i class="fab fa-telegram"></i>
                 <span class="btn-text">Telegram</span>
                 <span class="contact-info">+373 79 613 846</span>
             </a>
-            <a href="mailto:printreccomp@mail.ru?subject=%F0%9F%91%8B" class="btn email">
+            <a href="mailto:printreccomp@mail.ru?subject=👋" class="btn email">
                 <i class="far fa-envelope"></i>
                 <span class="btn-text">Почта</span>
                 <span class="contact-info">printreccomp@mail.ru</span>
@@ -329,35 +331,59 @@
 
         resizeCanvas();
 
-        // Check if it's winter season (December 1st to February 28/29)
-        function isWinterSeason() {
+        // Check current season
+        function getCurrentSeason() {
             const now = new Date();
             const month = now.getMonth() + 1; // 1-12
             const day = now.getDate();
             
-            // December 1st to end of February
-            return (month === 12 && day >= 1) || (month === 1) || (month === 2);
+            // Valentine's Day (February 12-14)
+            if (month === 2 && day >= 12 && day <= 14) {
+                return 'valentine';
+            }
+            // Winter season (December 1st to end of February, excluding Valentine's)
+            else if ((month === 12 && day >= 1) || (month === 1) || (month === 2 && (day < 12 || day > 14))) {
+                return 'winter';
+            }
+            // Default matrix theme
+            else {
+                return 'default';
+            }
         }
 
         // Set seasonal characters, colors and title
-        let chars, color, isWinter;
+        let chars, color, currentSeason;
         
         function setSeasonalTheme() {
-            isWinter = isWinterSeason();
+            currentSeason = getCurrentSeason();
             const titleElement = document.getElementById('page-title');
             
-            if (isWinter) {
-                // Winter theme - snowflakes and winter symbols
-                chars = '❄❅❆★❤♣♦♠⛄☃️🎄🎅🤶';
-                color = '#87CEEB'; // Light blue for snow
-                document.body.classList.add('winter');
-                titleElement.textContent = 'С Новым Годом!';
-            } else {
-                // Default matrix theme
-                chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
-                color = '#0F0'; // Green for matrix
-                document.body.classList.remove('winter');
-                titleElement.textContent = 'Свяжитесь со мной';
+            // Remove all seasonal classes
+            document.body.classList.remove('winter', 'valentine');
+            
+            switch(currentSeason) {
+                case 'valentine':
+                    // Valentine's theme - hearts and love symbols
+                    chars = '❤️💖💕💘💝💞💓💗💟♥️😍🥰😘';
+                    color = '#FF69B4'; // Hot pink for Valentine's
+                    document.body.classList.add('valentine');
+                    titleElement.textContent = 'С Днем Святого Валентина!';
+                    break;
+                    
+                case 'winter':
+                    // Winter theme - snowflakes and winter symbols
+                    chars = '❄❅❆★⛄☃️🎄🎅🤶';
+                    color = '#87CEEB'; // Light blue for snow
+                    document.body.classList.add('winter');
+                    titleElement.textContent = 'С Новым Годом!';
+                    break;
+                    
+                default:
+                    // Default matrix theme
+                    chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+                    color = '#0F0'; // Green for matrix
+                    titleElement.textContent = 'Свяжитесь со мной';
+                    break;
             }
         }
 
@@ -365,30 +391,25 @@
 
         const charArray = chars.split('');
         const fontSize = 14;
-        let columns = Math.floor(canvas.width / fontSize);
+        const columns = canvas.width / fontSize;
         const drops = [];
 
-        function initDrops() {
-            columns = Math.floor(canvas.width / fontSize);
-            drops.length = 0;
-            for (let i = 0; i < columns; i++) {
-                drops[i] = Math.random() * -100;
-            }
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
         }
-        initDrops();
 
         function draw() {
-            ctx.fillStyle = isWinter ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = currentSeason !== 'default' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             ctx.fillStyle = color;
             ctx.font = fontSize + 'px monospace';
 
-            for (let i = 0; i < drops.length; i++) {
+            for(let i = 0; i < drops.length; i++) {
                 const text = charArray[Math.floor(Math.random() * charArray.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
                 drops[i]++;
@@ -397,55 +418,35 @@
 
         setInterval(draw, 35);
 
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            initDrops();
-        });
+        window.addEventListener('resize', resizeCanvas);
 
         // Check season daily to update theme
         setInterval(setSeasonalTheme, 24 * 60 * 60 * 1000); // Check once per day
 
-        // ===== Deep-link helpers with smart fallback =====
-        function openWithFallback(appURL, storeOrWebURL, timeoutMs = 1200) {
-            let fallbackTimer;
-
-            const onVisibilityChange = () => {
-                if (document.hidden) {
-                    clearTimeout(fallbackTimer);
-                    document.removeEventListener('visibilitychange', onVisibilityChange);
-                }
-            };
-
-            document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
-
-            // Attempt to open app
-            window.location.href = appURL;
-
-            // If app didn't open, go to store/web
-            fallbackTimer = setTimeout(() => {
-                document.removeEventListener('visibilitychange', onVisibilityChange);
-                window.location.href = storeOrWebURL;
-            }, timeoutMs);
-        }
-
-        // Viber link handler (iOS/Android)
+        // Viber link handler for all devices
         document.getElementById('viber-link').addEventListener('click', function(e) {
             e.preventDefault();
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const number = '%2B37379613846';
-            const deeplink = `viber://chat?number=${number}`;
-            const storeURL = isIOS
-                ? 'https://apps.apple.com/app/viber-messenger-chats-calls/id382617920'
-                : 'https://play.google.com/store/apps/details?id=com.viber.voip';
-            openWithFallback(deeplink, storeURL, 1200);
-        });
-
-        // Telegram link handler с веб-fallback
-        document.getElementById('telegram-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            const appURL = 'tg://msg?to=%2B37379613846';
-            const webFallback = 'https://t.me/share/url?url=&text=%F0%9F%91%8B';
-            openWithFallback(appURL, webFallback, 1200);
+            
+            // Detect iOS devices
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                // For iOS - try multiple approaches
+                window.location.href = 'viber://add?number=37379613846';
+                
+                // Fallback - if Viber is not installed, open App Store
+                setTimeout(function() {
+                    window.location.href = 'https://apps.apple.com/app/viber-messenger-chats-calls/id382617920';
+                }, 2000);
+            } else {
+                // For Android and other devices
+                window.location.href = 'viber://chat?number=37379613846';
+                
+                // Fallback for Android
+                setTimeout(function() {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=com.viber.voip';
+                }, 2000);
+            }
         });
     </script>
 </body>
